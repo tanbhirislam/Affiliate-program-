@@ -4,11 +4,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Search, ShieldAlert, LogOut, LayoutGrid, Terminal, CheckCircle2, Sun, Moon, LogIn } from 'lucide-react';
+import { Search, ShieldAlert, LogOut, LayoutGrid, Terminal, CheckCircle2, Sun, Moon, LogIn, Copy, ExternalLink, AlertTriangle } from 'lucide-react';
 import { auth, db } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Product } from '../types';
+import firebaseConfig from '../../firebase-applet-config.json';
 
 interface HeaderProps {
   searchTerm: string;
@@ -41,6 +42,8 @@ export default function Header({
   const [isUserAdmin, setIsUserAdmin] = useState(false);
   const [authChecking, setAuthChecking] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [unauthorizedHost, setUnauthorizedHost] = useState<string | null>(null);
+  const [domainCopyCopied, setDomainCopyCopied] = useState(false);
 
   // Mobile view scroll-to-hide mechanics
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
@@ -151,11 +154,23 @@ export default function Header({
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     setAuthError(null);
+    setUnauthorizedHost(null);
     try {
       await signInWithPopup(auth, provider);
     } catch (err: any) {
-      console.error("Sign-in failed:", err);
-      setAuthError("Failed to authenticate. Ensure popup blockers are disabled.");
+      console.error("Sign-in failed with error object:", err);
+      const currentHost = window.location.hostname;
+      const errorCode = err?.code || '';
+      const errorMessage = err?.message || '';
+
+      if (errorCode === 'auth/unauthorized-domain' || errorMessage.includes('unauthorized-domain')) {
+        setUnauthorizedHost(currentHost);
+        setAuthError(`This deployment domain (${currentHost}) is not authorized in your Firebase Project configuration.`);
+      } else if (errorCode === 'auth/popup-blocked' || errorMessage.includes('popup-blocked') || errorMessage.includes('closed-by-user')) {
+        setAuthError("Auth popup was closed or blocked. Please allow popups for this site and click Sign In again.");
+      } else {
+        setAuthError(errorMessage || "Authentication failed. Please verify your connection.");
+      }
     }
   };
 
@@ -376,8 +391,74 @@ export default function Header({
         )}
 
         {authError && (
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-2.5 my-2 rounded text-xs text-amber-800">
-            {authError}
+          <div className="my-3 space-y-2">
+            {unauthorizedHost ? (
+              <div className={`p-4 rounded-xl border border-amber-200 bg-amber-50/70 text-slate-900 ${isDarkMode ? 'dark:bg-amber-950/20 dark:border-amber-900/40 dark:text-amber-100' : ''}`}>
+                <div className="flex items-start gap-2.5">
+                  <AlertTriangle className="text-amber-500 mt-0.5 shrink-0" size={16} />
+                  <div className="space-y-3.5 flex-1 w-full">
+                    <div>
+                      <h4 className="font-bold text-xs uppercase font-mono tracking-wider text-amber-805 dark:text-amber-400">Firebase Domain Authorization Required</h4>
+                      <p className="text-xs mt-1 text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+                        To enable Google Sign-In on this custom deployment URL, you must list this hostname under Authorized Domains in your Firebase Console.
+                      </p>
+                    </div>
+
+                    {/* Copy Hostname Box */}
+                    <div className="flex items-center justify-between gap-3 p-2 rounded-lg bg-white/90 dark:bg-slate-950/90 border border-amber-100/50 dark:border-slate-800/60 shadow-xs max-w-sm">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] uppercase font-bold tracking-wider font-mono text-slate-400">Hostname</p>
+                        <p className="text-xs font-mono font-bold truncate text-slate-800 dark:text-slate-200 select-all" id="unauthorized-host-string">{unauthorizedHost}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(unauthorizedHost);
+                          setDomainCopyCopied(true);
+                          setTimeout(() => setDomainCopyCopied(false), 2000);
+                        }}
+                        className={`px-3 py-1.5 rounded-md border transition-all flex items-center justify-center shrink-0 cursor-pointer text-[10px] font-bold uppercase font-mono tracking-wider ${
+                          domainCopyCopied 
+                            ? 'bg-emerald-500 border-emerald-500 text-white' 
+                            : 'bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-600 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800'
+                        }`}
+                        title="Copy hostname to clipboard"
+                      >
+                        {domainCopyCopied ? 'COPIED' : 'COPY'}
+                      </button>
+                    </div>
+
+                    {/* Step-by-Step Instructions */}
+                    <div className="space-y-2 text-xs text-slate-750 dark:text-slate-350">
+                      <p className="font-bold text-slate-800 dark:text-slate-200">How to authorize this domain:</p>
+                      <ol className="list-decimal pl-4 space-y-2 leading-relaxed">
+                        <li>
+                          Click to open your{' '}
+                          <a 
+                            href={`https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/providers`}
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="font-bold underline text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-350 inline-flex items-center gap-0.5 hover:scale-[1.01] transition-transform"
+                          >
+                            Firebase Console <ExternalLink size={12} />
+                          </a>
+                        </li>
+                        <li>Navigate to the <span className="font-bold text-slate-805 dark:text-white">Settings</span> tab on the authorization page.</li>
+                        <li>Select <span className="font-bold text-slate-805 dark:text-white">Authorized domains</span> from the left side list.</li>
+                        <li>Click <span className="font-bold text-slate-805 dark:text-white">Add domain</span>, paste your copied hostname (<span className="font-mono text-[11px]">{unauthorizedHost}</span>), and click <span className="font-bold text-slate-805 dark:text-white">Add</span>.</li>
+                        <li>Return back to your website, <span className="font-bold text-slate-805 dark:text-white">refresh the page</span>, and try logging in again!</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-amber-50 border-l-4 border-amber-500 p-2.5 my-2 rounded text-xs text-amber-800 dark:bg-amber-950/20 dark:border-amber-900/60 dark:text-amber-300">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle size={14} className="text-amber-500 shrink-0" />
+                  <span>{authError}</span>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
