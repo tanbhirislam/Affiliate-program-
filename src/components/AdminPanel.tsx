@@ -65,6 +65,7 @@ export default function AdminPanel({
   const [bLogoLetter, setBLogoLetter] = useState('A');
   const [bLogoUrl, setBLogoUrl] = useState('');
   const [bFaviconUrl, setBFaviconUrl] = useState('');
+  const [bFaviconName, setBFaviconName] = useState('');
   const [bHeroBadgeText, setBHeroBadgeText] = useState('HOT DEALS SPOTLIGHT');
   const [bFooterText, setBFooterText] = useState('© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.');
   const [bFooterDisclaimer, setBFooterDisclaimer] = useState('We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.');
@@ -121,6 +122,7 @@ export default function AdminPanel({
       setBLogoLetter(themeConfig.logoLetter || 'A');
       setBLogoUrl(themeConfig.logoUrl || '');
       setBFaviconUrl(themeConfig.faviconUrl || '');
+      setBFaviconName(themeConfig.faviconName || '');
       setBHeroBadgeText(themeConfig.heroBadgeText || 'HOT DEALS SPOTLIGHT');
       setBFooterText(themeConfig.footerText || '© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.');
       setBFooterDisclaimer(themeConfig.footerDisclaimer || 'We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.');
@@ -199,6 +201,7 @@ export default function AdminPanel({
         logoLetter: bLogoLetter,
         logoUrl: bLogoUrl,
         faviconUrl: bFaviconUrl,
+        faviconName: bFaviconName,
         heroBadgeText: bHeroBadgeText,
         footerText: bFooterText,
         footerDisclaimer: bFooterDisclaimer,
@@ -1598,6 +1601,20 @@ export default function AdminPanel({
                   placeholder="https://example.com/favicon.ico"
                 />
                 <p className="text-[10px] text-slate-400">Updates the web browser icon dynamically in real-time on save.</p>
+              </div>
+
+              <div className="space-y-2 font-medium">
+                <label className={`block text-xs font-bold uppercase font-mono ${isDarkMode ? 'text-slate-300' : 'text-slate-705'}`}>Browser Tab Title / Favicon Name (Optional)</label>
+                <input
+                  type="text"
+                  value={bFaviconName}
+                  onChange={(e) => setBFaviconName(e.target.value)}
+                  className={`w-full px-3.5 py-2 border rounded-lg text-xs focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                    isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
+                  }`}
+                  placeholder="e.g. My Premium Tech Store"
+                />
+                <p className="text-[10px] text-slate-400">Updates the text label appearing in your browser's tab dynamically.</p>
               </div>
 
               {/* Social Media Links section */}

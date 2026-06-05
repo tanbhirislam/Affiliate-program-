@@ -80,6 +80,7 @@ export interface ThemeConfig {
   logoShape: 'circle' | 'square' | 'rounded';
   logoUrl?: string;
   faviconUrl?: string;
+  faviconName?: string;
   facebookUrl?: string;
   instagramUrl?: string;
   twitterUrl?: string;

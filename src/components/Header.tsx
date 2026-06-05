@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Search, ShieldAlert, LogOut, LayoutGrid, Terminal, CheckCircle2, Sun, Moon } from 'lucide-react';
+import { Search, ShieldAlert, LogOut, LayoutGrid, Terminal, CheckCircle2, Sun, Moon, LogIn } from 'lucide-react';
 import { auth, db } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -255,10 +255,10 @@ export default function Header({
                 <button
                   id="login-button-mobile"
                   onClick={handleLogin}
-                  className={`px-2 py-1 text-[9px] font-bold rounded-lg border flex items-center gap-1 transition-colors ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200'}`}
+                  className={`px-2.5 py-1 text-[9px] font-bold rounded-lg border flex items-center gap-1 transition-colors ${isDarkMode ? 'bg-slate-850 hover:bg-slate-800 border-slate-750 text-slate-200' : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200'}`}
                 >
-                  <ShieldAlert size={11} className="text-slate-500" />
-                  Admin
+                  <LogIn size={11} className="text-slate-500" />
+                  Login / Signup
                 </button>
               )}
             </div>
@@ -308,7 +308,7 @@ export default function Header({
                   <p className={`text-xs font-semibold truncate max-w-[150px] ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>{user.displayName || user.email}</p>
                   <p className="text-[10px] text-emerald-500 font-medium flex items-center justify-end gap-0.5">
                     <CheckCircle2 size={10} />
-                    {isUserAdmin ? 'Admin authorized' : 'Verified buyer'}
+                    {isUserAdmin ? 'Role: Administrator' : 'Role: Registered User'}
                   </p>
                 </div>
                 {isUserAdmin && (
@@ -338,10 +338,14 @@ export default function Header({
               <button
                 id="login-button"
                 onClick={handleLogin}
-                className={`px-4 py-2 text-xs font-bold rounded-lg border transition-colors flex items-center gap-2 ${isDarkMode ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' : 'bg-white hover:bg-slate-100 text-slate-800 border-slate-200'}`}
+                className={`px-4 py-2 text-xs font-bold rounded-lg border transition-all flex items-center gap-2 hover:scale-[1.01] ${
+                  isDarkMode 
+                    ? 'bg-slate-850 hover:bg-slate-800 text-slate-200 border-slate-750' 
+                    : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 shadow-xs'
+                }`}
               >
-                <ShieldAlert size={15} className="text-slate-500" />
-                Admin Console
+                <LogIn size={15} className="text-slate-500" />
+                Login / Signup
               </button>
             )}
           </div>

@@ -71,6 +71,7 @@ export default function App() {
             logoShape: parsed.logoShape || 'rounded',
             logoUrl: parsed.logoUrl || '',
             faviconUrl: parsed.faviconUrl || '',
+            faviconName: parsed.faviconName || '',
             facebookUrl: parsed.facebookUrl || '',
             instagramUrl: parsed.instagramUrl || '',
             twitterUrl: parsed.twitterUrl || '',
@@ -120,6 +121,7 @@ export default function App() {
       logoShape: 'rounded',
       logoUrl: '',
       faviconUrl: '',
+      faviconName: '',
       facebookUrl: '',
       instagramUrl: '',
       twitterUrl: '',
@@ -206,6 +208,7 @@ export default function App() {
           logoShape: data.logoShape || 'rounded',
           logoUrl: data.logoUrl || '',
           faviconUrl: data.faviconUrl || '',
+          faviconName: data.faviconName || '',
           facebookUrl: data.facebookUrl || '',
           instagramUrl: data.instagramUrl || '',
           twitterUrl: data.twitterUrl || '',
@@ -266,6 +269,16 @@ export default function App() {
       }
     }
   }, [themeConfig.faviconUrl]);
+
+  // Sync browser Tab Title (Favicon Name) dynamically
+  useEffect(() => {
+    if (themeConfig.faviconName && themeConfig.faviconName.trim() !== '') {
+      document.title = themeConfig.faviconName;
+    } else {
+      const defaultTitle = `${themeConfig.siteName || 'Affiliate'} ${themeConfig.siteNameHighlighted || 'Showcase'} - ${themeConfig.slogan || 'Curated Storefront'}`;
+      document.title = defaultTitle;
+    }
+  }, [themeConfig.faviconName, themeConfig.siteName, themeConfig.siteNameHighlighted, themeConfig.slogan]);
 
   // Snapshot reactive page configurations
   useEffect(() => {
