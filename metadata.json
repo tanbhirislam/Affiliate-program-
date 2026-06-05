@@ -1,0 +1,6 @@
+{
+  "name": "Affiliate Marketing Product Showcase",
+  "description": "An affiliate e-commerce showroom with a detailed product catalog, SEO-optimized layout, and a secure administration control panel with basic click-tracking analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

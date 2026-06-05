@@ -1,0 +1,216 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Default-Deny Catch-All Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions for common security evaluations
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && (request.auth.token.email_verified == true || request.auth.token.email == 'businessonline.6251@gmail.com');
+    }
+
+    // Administrative privileges are verified strictly in the trusted /admins collection.
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helpers to access map states safely
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 2: Validation Blueprint (Entity: Product)
+    // -------------------------------------------------------------------------
+    function isValidProduct(p) {
+      return p.keys().hasAll(['title', 'description', 'shortDescription', 'imageUrl', 'affiliateUrl', 'category', 'price'])
+        && p.title is string && p.title.size() > 0 && p.title.size() <= 150
+        && p.description is string && p.description.size() > 0 && p.description.size() <= 5000
+        && p.shortDescription is string && p.shortDescription.size() > 0 && p.shortDescription.size() <= 300
+        && p.imageUrl is string && p.imageUrl.size() > 0 && p.imageUrl.size() <= 1500
+        && p.affiliateUrl is string && p.affiliateUrl.size() > 0 && p.affiliateUrl.size() <= 1500
+        && p.category is string && p.category.size() > 0 && p.category.size() <= 100
+        && (p.price is float || p.price is int) && p.price >= 0.0
+        && (!('originalPrice' in p) || (p.originalPrice is float || p.originalPrice is int) && p.originalPrice >= 0.0)
+        && (!('rating' in p) || ((p.rating is float || p.rating is int) && p.rating >= 1.0 && p.rating <= 5.0))
+        && (!('isFeatured' in p) || p.isFeatured is bool)
+        && (!('isTrending' in p) || p.isTrending is bool)
+        && (!('benefits' in p) || (p.benefits is list && p.benefits.size() <= 30 && (p.benefits.size() == 0 || p.benefits[0] is string)))
+        && (!('clickCount' in p) || p.clickCount is int)
+        && (!('createdAt' in p) || p.createdAt is timestamp)
+        && (!('updatedAt' in p) || p.updatedAt is timestamp);
+    }
+
+    match /products/{productId} {
+      allow read: if true; // Public listings retrieval
+      
+      allow create: if isAdmin() 
+        && isValidId(productId) 
+        && isValidProduct(incoming())
+        && incoming().createdAt == request.time;
+
+      allow update: if (
+        // Action A: Administrator full catalog edits
+        (isAdmin() && isValidProduct(incoming()) && incoming().createdAt == existing().createdAt && incoming().updatedAt == request.time)
+        ||
+        // Action B: Public checkout redirect statistical incremental tracking of clicking events
+        (
+          incoming().diff(existing()).affectedKeys().hasOnly(['clickCount']) 
+          && incoming().clickCount == existing().clickCount + 1
+        )
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 2 & 6: Telemetry Logs and Access Isolation (Entity: ClickEvent)
+    // -------------------------------------------------------------------------
+    function isValidClickEvent(c) {
+      return c.keys().hasAll(['productId', 'productTitle', 'buttonType', 'timestamp'])
+        && c.productId is string && c.productId.size() > 0 && c.productId.size() <= 128
+        && c.productTitle is string && c.productTitle.size() > 0 && c.productTitle.size() <= 150
+        && c.buttonType is string && (c.buttonType == 'buy_now' || c.buttonType == 'view_deal')
+        && c.timestamp is timestamp
+        && (!('referrer' in c) || (c.referrer is string && c.referrer.size() <= 1000));
+    }
+
+    match /clickEvents/{eventId} {
+      // Competitor tracking logs leakage prevention: Only Administrators can query transaction telemetry
+      allow list, get: if isAdmin();
+
+      // Permit anyone (guest or authorized) to register telemetry clicks
+      allow create: if isValidId(eventId) 
+        && isValidClickEvent(incoming()) 
+        && incoming().timestamp == request.time
+        // Relationship Invariant validation during registration
+        && exists(/databases/$(database)/documents/products/$(incoming().productId));
+
+      // Telemetry logs are write-once only. No post-creation modifications or removals allowed
+      allow update, delete: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 2 & 6: Branding Configuration (Entity: Config)
+    // -------------------------------------------------------------------------
+    function isValidConfig(c) {
+      return (
+        // Choice 1: Branding and Style Configuration
+        (c.keys().hasAll(['siteName', 'updatedAt'])
+         && c.siteName is string && c.siteName.size() > 0 && c.siteName.size() <= 100
+         && (!('siteNameHighlighted' in c) || c.siteNameHighlighted is string && c.siteNameHighlighted.size() <= 100)
+         && (!('slogan' in c) || c.slogan is string && c.slogan.size() <= 250)
+         && (!('logoLetter' in c) || c.logoLetter is string && c.logoLetter.size() <= 5)
+         && (!('heroBadgeText' in c) || c.heroBadgeText is string && c.heroBadgeText.size() <= 200)
+         && (!('footerText' in c) || c.footerText is string && c.footerText.size() <= 300)
+         && (!('footerDisclaimer' in c) || c.footerDisclaimer is string && c.footerDisclaimer.size() <= 2000)
+         && (!('accentColor' in c) || c.accentColor is string && c.accentColor.size() <= 50)
+         && (!('logoShape' in c) || c.logoShape is string && c.logoShape.size() <= 50)
+         && c.updatedAt is timestamp)
+        ||
+        // Choice 2: Custom Pages (About Us, Contact, Privacy Policy) Configuration
+        (c.keys().hasAll(['content', 'updatedAt'])
+         && c.content is string && c.content.size() <= 10000
+         && (!('email' in c) || c.email is string && c.email.size() <= 200)
+         && (!('phone' in c) || c.phone is string && c.phone.size() <= 50)
+         && (!('address' in c) || c.address is string && c.address.size() <= 500)
+         && c.updatedAt is timestamp)
+      );
+    }
+
+    match /configs/{configId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidId(configId) && isValidConfig(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 6 & 8: Administration Registration (Entity: Admin)
+    // -------------------------------------------------------------------------
+    function isValidAdmin(a) {
+      return a.keys().hasAll(['email', 'createdAt'])
+        && a.email is string && a.email.size() > 0 && a.email.size() <= 200
+        && a.createdAt is timestamp;
+    }
+
+    match /admins/{adminId} {
+      // Administrators list can be inspected by authenticated operator if they are checking their own admin state or if they are admin
+      allow read: if isSignedIn() && (request.auth.uid == adminId || isEmailVerified() || isAdmin());
+
+      // Only administrators can add or delete administrators, or the bootstrap admin can self-bootstrap
+      allow create: if isSignedIn() && isValidId(adminId) && isValidAdmin(incoming()) && (
+        // Self-bootstrapping or administrator assignment
+        (isAdmin()) 
+        || 
+        // Bootstrapping default: runtime user email from metadata is BusinessOnline email
+        (incoming().email == 'businessonline.6251@gmail.com' && request.auth.uid == adminId)
+      );
+
+      allow update: if isSignedIn() && isAdmin() && isValidAdmin(incoming()) && incoming().createdAt == existing().createdAt;
+
+      allow delete: if isSignedIn() && isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 2 & 6: Contact Messages Validation (Entity: ContactMessage)
+    // -------------------------------------------------------------------------
+    function isValidContactMessage(m) {
+      return m.keys().hasAll(['name', 'email', 'message', 'timestamp'])
+        && m.name is string && m.name.size() > 0 && m.name.size() <= 150
+        && m.email is string && m.email.size() > 0 && m.email.size() <= 200
+        && m.message is string && m.message.size() > 0 && m.message.size() <= 5000
+        && m.timestamp is timestamp;
+    }
+
+    match /contactMessages/{messageId} {
+      // Secure listing queries: Only administrators can read or query message dispatches
+      allow list, get: if isAdmin();
+
+      // Permit guest customers to securely create message requests
+      allow create: if isValidId(messageId) 
+        && isValidContactMessage(incoming()) 
+        && incoming().timestamp == request.time;
+
+      // Contact messages are write-once only. Let admins delete if needed
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------------------
+    // Pillar 7: Visitor Sessions Validation (Entity: VisitorSession)
+    // -------------------------------------------------------------------------
+    function isValidVisitorSession(v) {
+      return v.keys().hasAll(['userAgent', 'referrer', 'timestamp', 'location', 'device', 'page'])
+        && v.userAgent is string
+        && v.referrer is string
+        && v.timestamp is timestamp
+        && v.location is string
+        && v.device is string
+        && v.page is string;
+    }
+
+    match /visitorSessions/{sessionId} {
+      allow list, get: if isAdmin();
+      allow create: if isValidId(sessionId)
+        && isValidVisitorSession(incoming())
+        && incoming().timestamp == request.time;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+  }
+}

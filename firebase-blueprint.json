@@ -1,0 +1,234 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An affiliate marketing product listing with link, image, price, and category properties.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the product listing."
+        },
+        "description": {
+          "type": "string",
+          "description": "Full-text description detailing features, benefits, and specifications."
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "A high-impact short description for visual product cards."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Secure URL pointing to the product asset image."
+        },
+        "affiliateUrl": {
+          "type": "string",
+          "description": "Our referral URL for redirecting client purchase intents."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category categorization label, e.g., Tech, Gadgets, Software, Deals."
+        },
+        "price": {
+          "type": "number",
+          "description": "Current price of the product shown in the interface."
+        },
+        "originalPrice": {
+          "type": "number",
+          "description": "Original retail price shown before discount as cross-out text."
+        },
+        "benefits": {
+          "type": "array",
+          "description": "A bounded array listing user benefit strings."
+        },
+        "rating": {
+          "type": "number",
+          "description": "Weighted satisfaction rating scale, from 1.0 to 5.0."
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "Indicates whether the product represents a high-profile home screen hero."
+        },
+        "isTrending": {
+          "type": "boolean",
+          "description": "Indicates whether the product displays in the trending carousels."
+        },
+        "clickCount": {
+          "type": "integer",
+          "description": "Statistical summary count tracking redirected checkouts."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Relational generation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last edit timestamp."
+        }
+      },
+      "required": [
+        "title",
+        "description",
+        "shortDescription",
+        "imageUrl",
+        "affiliateUrl",
+        "category",
+        "price"
+      ]
+    },
+    "ClickEvent": {
+      "title": "ClickEvent",
+      "description": "An interaction telemetry event tracing affiliate outbound redirection click metadata.",
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "string",
+          "description": "Unique identifier linking this event back to the original source Product."
+        },
+        "productTitle": {
+          "type": "string",
+          "description": "Human-readable label capturing the product title at click-time."
+        },
+        "buttonType": {
+          "type": "string",
+          "description": "Interactive action category, either 'buy_now' or 'view_deal'."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-side moment recording redirection event."
+        },
+        "referrer": {
+          "type": "string",
+          "description": "Web navigation source context matching referrer."
+        }
+      },
+      "required": [
+        "productId",
+        "productTitle",
+        "buttonType",
+        "timestamp"
+      ]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "A restricted user registration designating official platform administrative credentials.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Identified safe email address for administrative checks."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Account registration initialization timestamp."
+        }
+      },
+      "required": [
+        "email",
+        "createdAt"
+      ]
+    },
+    "SystemConfig": {
+      "title": "SystemConfig",
+      "description": "General system configuration document or custom page content (About Us, Contact, Privacy).",
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "The text or markdown content of the page."
+        },
+        "email": {
+          "type": "string",
+          "description": "Main contact email address (optional, for Contact page)."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Main contact phone number (optional, for Contact page)."
+        },
+        "address": {
+          "type": "string",
+          "description": "Contact physical location address (optional, for Contact page)."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Page or config last update timestamp."
+        }
+      }
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "A user-submitted contact inquiry message sent through the web storefront Contact form.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The sender's name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The sender's contact email address."
+        },
+        "message": {
+          "type": "string",
+          "description": "The raw text message describing their inquiry or interest."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-side moment recording message creation."
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "message",
+        "timestamp"
+      ]
+    },
+    "VisitorSession": {
+      "title": "VisitorSession",
+      "description": "Real-time user session visitor log.",
+      "type": "object",
+      "properties": {
+        "userAgent": { "type": "string" },
+        "referrer": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "location": { "type": "string" },
+        "device": { "type": "string" },
+        "page": { "type": "string" }
+      },
+      "required": ["userAgent", "referrer", "timestamp", "location", "device", "page"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "The product listings collection."
+    },
+    "/clickEvents/{eventId}": {
+      "schema": "ClickEvent",
+      "description": "Event telemetry logs for product affiliate link redirection clicks."
+    },
+    "/admins/{adminId}": {
+      "schema": "Admin",
+      "description": "Explicitly defined whitelist record verifying administrative auth tokens."
+    },
+    "/configs/{configId}": {
+      "schema": "SystemConfig",
+      "description": "Site-wide customizable configurations, layout parameters, or dynamic rich pages like About, Contact, or Privacy."
+    },
+    "/contactMessages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Guest and user-submitted contact message inquiries."
+    },
+    "/visitorSessions/{sessionId}": {
+      "schema": "VisitorSession",
+      "description": "Live sessions for real-time visitor counts and device analytics."
+    }
+  }
+}
