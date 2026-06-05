@@ -3,7 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    <title>Affiliate Showcase - CURATED STOREFRONT</title>
+    <script>
+      (function() {
+        try {
+          var cached = localStorage.getItem('affiliate-branding-config-cache');
+          if (cached) {
+            var parsed = JSON.parse(cached);
+            if (parsed) {
+              if (parsed.faviconName && parsed.faviconName.trim() !== '') {
+                document.title = parsed.faviconName;
+              } else {
+                var name = parsed.siteName || 'Affiliate';
+                var highlighted = parsed.siteNameHighlighted || 'Showcase';
+                var slogan = parsed.slogan || 'CURATED STOREFRONT';
+                document.title = name + ' ' + highlighted + ' - ' + slogan;
+              }
+              if (parsed.faviconUrl && parsed.faviconUrl.trim() !== '') {
+                var link = document.querySelector("link[rel~='icon']");
+                if (!link) {
+                  link = document.createElement('link');
+                  link.rel = 'icon';
+                  document.head.appendChild(link);
+                }
+                link.href = parsed.faviconUrl;
+              }
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
