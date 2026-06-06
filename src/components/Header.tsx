@@ -218,7 +218,7 @@ export default function Header({
               )}
               <div>
                 <h1 className={`font-display font-extrabold text-sm sm:text-xl tracking-tight leading-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                  {themeConfig?.siteName || 'Affiliate'}<span className={logoTextAccent}>{themeConfig?.siteNameHighlighted || 'Showcase'}</span>
+                  {themeConfig?.siteName || 'Curated'}<span className={logoTextAccent}>{themeConfig?.siteNameHighlighted || 'Showcase'}</span>
                 </h1>
                 <p className={`text-[8px] sm:text-[10px] font-mono tracking-wider font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-400'}`}>{themeConfig?.slogan || 'CURATED STOREFRONT'}</p>
               </div>

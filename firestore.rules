@@ -39,7 +39,7 @@ service cloud.firestore {
     // -------------------------------------------------------------------------
     function isValidProduct(p) {
       return p.keys().hasAll(['title', 'description', 'shortDescription', 'imageUrl', 'affiliateUrl', 'category', 'price'])
-        && p.title is string && p.title.size() > 0 && p.title.size() <= 150
+        && p.title is string && p.title.size() > 0 && p.title.size() <= 2000
         && p.description is string && p.description.size() > 0 && p.description.size() <= 5000
         && p.shortDescription is string && p.shortDescription.size() > 0 && p.shortDescription.size() <= 300
         && p.imageUrl is string && p.imageUrl.size() > 0 && p.imageUrl.size() <= 1500
@@ -51,6 +51,10 @@ service cloud.firestore {
         && (!('isFeatured' in p) || p.isFeatured is bool)
         && (!('isTrending' in p) || p.isTrending is bool)
         && (!('benefits' in p) || (p.benefits is list && p.benefits.size() <= 30 && (p.benefits.size() == 0 || p.benefits[0] is string)))
+        && (!('images' in p) || (p.images is list && p.images.size() <= 40 && (p.images.size() == 0 || p.images[0] is string)))
+        && (!('hideBuyNow' in p) || p.hideBuyNow is bool)
+        && (!('directRedirect' in p) || p.directRedirect is bool)
+        && (!('secureCheckoutDetails' in p) || (p.secureCheckoutDetails is string && p.secureCheckoutDetails.size() <= 1500))
         && (!('clickCount' in p) || p.clickCount is int)
         && (!('createdAt' in p) || p.createdAt is timestamp)
         && (!('updatedAt' in p) || p.updatedAt is timestamp);

@@ -23,6 +23,7 @@ export interface Product {
   updatedAt: any;
   hideBuyNow?: boolean;
   directRedirect?: boolean;
+  secureCheckoutDetails?: string;
 }
 
 export interface ClickEvent {

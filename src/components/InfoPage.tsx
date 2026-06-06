@@ -47,7 +47,7 @@ export default function InfoPage({
           title: 'About Us',
           subtitle: 'Learn more about our curated showcase and vetting operations.',
           icon: <Info className="text-blue-500" size={24} />,
-          content: aboutConfig.content || 'Welcome to our premium affiliate catalog showroom. We audit, review, and list elite products across technology, software, and lifestyle gear.',
+          content: aboutConfig.content || 'Welcome to our premium curated catalog showroom. We audit, review, and list elite products across technology, software, and lifestyle gear.',
         };
       case 'contact':
         return {

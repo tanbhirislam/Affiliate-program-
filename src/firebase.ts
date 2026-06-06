@@ -56,7 +56,7 @@ export const INITIAL_PRODUCTS: Omit<Product, 'id'>[] = [
   {
     title: "MacBook Pro 16″ M3 Max (36GB/1TB SSD)",
     shortDescription: "The absolute pinnacle of mobile computer performance designed for software development, machine learning, and content creation.",
-    description: "Supercharged by the elite Apple M3 Max processor. Features a stunning 16.2-inch Liquid Retina XDR display, up to 128GB of unified memory, and an astonishing 22 hours of battery lifespan. Perfect for compilation workloads, heavy rendering, or spinning up high-performance local AI models. Housed in a gorgeous spatial-black space gray anodized solid aluminum frame.",
+    description: "Supercharged by the elite Apple M3 Max processor. Features a stunning 16.2-inch Liquid Retina XDR display, up to 128GB of unified memory, and an astonishing 22 hours of battery lifespan. Perfect for compilation workloads, heavy rendering, or spinning up high-performance local compilation environments. Housed in a gorgeous spatial-black space gray anodized solid aluminum frame.",
     imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80",
     affiliateUrl: "https://www.amazon.com/dp/B0CM5N2YBM?tag=devshop-20",
     category: "Tech",
@@ -96,8 +96,8 @@ export const INITIAL_PRODUCTS: Omit<Product, 'id'>[] = [
     updatedAt: new Date()
   },
   {
-    title: "Cursor AI Code Editor Pro Subscription",
-    shortDescription: "The premier AI-first code editor designed to pair-program with local context awareness, custom models, and system-level shortcuts.",
+    title: "Cursor Code Editor Pro Subscription",
+    shortDescription: "The premier developer-first code editor designed to pair-program with local context awareness, smart templates, and system-level shortcuts.",
     description: "Supercharge your software engineering output with Cursor. Features deep codebase indexing, inline terminal assistants, custom prompting models, and real-time git integration. Engineered to minimize cognitive load, automate repetitive refactoring, and accelerate your feature deployments.",
     imageUrl: "https://images.unsplash.com/photo-1618401471353-b98aedd07871?auto=format&fit=crop&w=1200&q=80",
     affiliateUrl: "https://cursor.com?via=devshop-ref",
@@ -105,7 +105,7 @@ export const INITIAL_PRODUCTS: Omit<Product, 'id'>[] = [
     price: 20,
     rating: 4.7,
     benefits: [
-      "Universal AI context injection targeting full project codebases",
+      "Universal workspace context injection targeting full project codebases",
       "Instant terminal instruction orchestration using conversational scripts",
       "Predictive multi-file logical code autocomplete suggestions"
     ],

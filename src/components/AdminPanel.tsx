@@ -59,15 +59,15 @@ export default function AdminPanel({
   const [loadingAnalytics, setLoadingAnalytics] = useState(false);
 
   // Branding config states representing Site Branding model
-  const [bSiteName, setBSiteName] = useState('Affiliate');
+  const [bSiteName, setBSiteName] = useState('Curated');
   const [bSiteNameHighlighted, setBSiteNameHighlighted] = useState('Showcase');
   const [bSlogan, setBSlogan] = useState('CURATED STOREFRONT');
-  const [bLogoLetter, setBLogoLetter] = useState('A');
+  const [bLogoLetter, setBLogoLetter] = useState('C');
   const [bLogoUrl, setBLogoUrl] = useState('');
   const [bFaviconUrl, setBFaviconUrl] = useState('');
   const [bFaviconName, setBFaviconName] = useState('');
   const [bHeroBadgeText, setBHeroBadgeText] = useState('HOT DEALS SPOTLIGHT');
-  const [bFooterText, setBFooterText] = useState('© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.');
+  const [bFooterText, setBFooterText] = useState('© 2026 Curated Product Showcase. All Rights Reserved.');
   const [bFooterDisclaimer, setBFooterDisclaimer] = useState('We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.');
   const [bAccentColor, setBAccentColor] = useState<'blue' | 'emerald' | 'amber' | 'rose' | 'violet' | 'indigo' | 'slate'>('blue');
   const [bLogoShape, setBLogoShape] = useState<'circle' | 'square' | 'rounded'>('rounded');
@@ -116,15 +116,15 @@ export default function AdminPanel({
   // Sync themeConfig presets
   useEffect(() => {
     if (themeConfig) {
-      setBSiteName(themeConfig.siteName || 'Affiliate');
+      setBSiteName(themeConfig.siteName || 'Curated');
       setBSiteNameHighlighted(themeConfig.siteNameHighlighted || 'Showcase');
       setBSlogan(themeConfig.slogan || 'CURATED STOREFRONT');
-      setBLogoLetter(themeConfig.logoLetter || 'A');
+      setBLogoLetter(themeConfig.logoLetter || 'C');
       setBLogoUrl(themeConfig.logoUrl || '');
       setBFaviconUrl(themeConfig.faviconUrl || '');
       setBFaviconName(themeConfig.faviconName || '');
       setBHeroBadgeText(themeConfig.heroBadgeText || 'HOT DEALS SPOTLIGHT');
-      setBFooterText(themeConfig.footerText || '© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.');
+      setBFooterText(themeConfig.footerText || '© 2026 Curated Product Showcase. All Rights Reserved.');
       setBFooterDisclaimer(themeConfig.footerDisclaimer || 'We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.');
       setBAccentColor(themeConfig.accentColor || 'blue');
       setBLogoShape(themeConfig.logoShape || 'rounded');
@@ -306,8 +306,10 @@ export default function AdminPanel({
   const [isTrending, setIsTrending] = useState(false);
   const [benefitsInput, setBenefitsInput] = useState('');
   const [additionalImages, setAdditionalImages] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
   const [hideBuyNow, setHideBuyNow] = useState(false);
   const [directRedirect, setDirectRedirect] = useState(false);
+  const [secureCheckoutDetails, setSecureCheckoutDetails] = useState('');
 
   // Auto-clear notifications helper
   useEffect(() => {
@@ -448,6 +450,7 @@ export default function AdminPanel({
     setAdditionalImages(prod.images ? prod.images.join('\n') : '');
     setHideBuyNow(prod.hideBuyNow || false);
     setDirectRedirect(prod.directRedirect || false);
+    setSecureCheckoutDetails(prod.secureCheckoutDetails || '');
     setActiveTab('create');
   };
 
@@ -469,6 +472,7 @@ export default function AdminPanel({
     setAdditionalImages('');
     setHideBuyNow(false);
     setDirectRedirect(false);
+    setSecureCheckoutDetails('');
   };
 
   // Create / Update product handler
@@ -526,6 +530,7 @@ export default function AdminPanel({
         benefits,
         hideBuyNow,
         directRedirect,
+        secureCheckoutDetails: secureCheckoutDetails.trim(),
         updatedAt: serverTimestamp(),
       };
 
@@ -592,7 +597,7 @@ export default function AdminPanel({
             <Database className={activeTheme?.text || 'text-blue-600'} size={20} />
             Administrator Control Workspace
           </h2>
-          <p className={`text-xs leading-relaxed mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Manage live affiliate marketing showcase registries, modify redirect anchors, and audit traffic telemetry logs.</p>
+          <p className={`text-xs leading-relaxed mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Manage live curated product showcase registries, modify referral redirect anchors, and audit traffic telemetry logs.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -842,7 +847,7 @@ export default function AdminPanel({
           <form onSubmit={handleSaveProduct} className="p-5 sm:p-6 md:p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
               
-              {/* Product Title (150 chars max) */}
+              {/* Product Title (2000 chars max) */}
               <div className="md:col-span-8 flex flex-col gap-1">
                 <label className={`text-xs font-bold uppercase tracking-wide ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Product Title <span className="text-rose-500">*</span></label>
                 <input
@@ -850,7 +855,7 @@ export default function AdminPanel({
                   placeholder="e.g. Sony WH-1000XM5 Premium Headphones"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  maxLength={150}
+                  maxLength={2000}
                   required
                   className={`w-full px-3.5 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs ${
                     isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-slate-50/20 border-slate-350 text-slate-900'
@@ -900,7 +905,7 @@ export default function AdminPanel({
 
               {/* Affiliate Destination URL */}
               <div className="md:col-span-12 flex flex-col gap-1">
-                <label className={`text-xs font-bold uppercase tracking-wide ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Affiliate Action URL (Buy Redirect Target) <span className="text-rose-500">*</span></label>
+                <label className={`text-xs font-bold uppercase tracking-wide ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Product Redirect URL (Buy Action Target) <span className="text-rose-500">*</span></label>
                 <input
                   type="url"
                   placeholder="e.g. https://www.amazon.com/dp/B09XS7H?tag=my-tag-20"
@@ -931,41 +936,101 @@ export default function AdminPanel({
               </div>
 
               {/* Additional Product Images */}
-              <div className="md:col-span-12 flex flex-col gap-1">
-                <label className={`text-xs font-bold uppercase tracking-wide ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Additional Product Images (One URL per line, optional)
-                </label>
-                <textarea
-                  placeholder="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6&#10;https://images.unsplash.com/photo-1523275335684-37898b6baf30"
-                  value={additionalImages}
-                  onChange={(e) => setAdditionalImages(e.target.value)}
-                  rows={2}
-                  className={`w-full px-3.5 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs font-mono ${
-                    isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-slate-50/20 border-slate-350 text-slate-900'
-                  }`}
-                />
-                <p className={`text-[10px] ${isDarkMode ? 'text-slate-550' : 'text-slate-400'}`}>
-                  Paste image URLs – one copy per line – to display a gorgeous carousel detail showroom.
-                </p>
+              <div className="md:col-span-12 flex flex-col gap-2.5 p-4 rounded-xl border border-dashed bg-slate-500/5 dark:bg-slate-950/20 border-slate-300 dark:border-slate-800">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <label className={`text-xs font-bold uppercase tracking-wide font-mono ${isDarkMode ? 'text-slate-350' : 'text-slate-800'}`}>
+                      📸 Product Photo Gallery Showcase (Unlimited Images)
+                    </label>
+                    <p className={`text-[10px] ${isDarkMode ? 'text-slate-450' : 'text-slate-500'}`}>
+                      Add multiple alternative product photos to display as a premium carousel layout inside product details.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick Add URL Box */}
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    placeholder="https://example.com/another-product-image.jpg"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs ${
+                      isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100 placeholder-slate-650' : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!newImageUrl.trim()) return;
+                      const current = additionalImages.trim();
+                      const updated = current ? current + '\n' + newImageUrl.trim() : newImageUrl.trim();
+                      setAdditionalImages(updated);
+                      setNewImageUrl('');
+                    }}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold font-mono rounded-lg transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer shrink-0"
+                  >
+                    + Add to Gallery
+                  </button>
+                </div>
+
+                {/* Bulk Textarea Editor for High-productivity paste */}
+                <div className="space-y-1">
+                  <label className={`text-[10px] font-bold uppercase tracking-wider font-mono ${isDarkMode ? 'text-slate-450' : 'text-slate-500'}`}>
+                    Bulk Edit URLs (One copy per line)
+                  </label>
+                  <textarea
+                    placeholder="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6&#10;https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+                    value={additionalImages}
+                    onChange={(e) => setAdditionalImages(e.target.value)}
+                    rows={2}
+                    className={`w-full px-3.5 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs font-mono ${
+                      isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-slate-50/20 border-slate-350 text-slate-900'
+                    }`}
+                  />
+                </div>
+
+                {/* Interactive Gallery Thumbnail pre-visuals with interactive deletion handles */}
                 {additionalImages.trim().split('\n').filter(url => url.trim().length > 0).length > 0 && (
-                  <div className="mt-1.5">
-                    <span className={`text-[9px] font-bold uppercase tracking-wider font-mono ${isDarkMode ? 'text-slate-400 font-black' : 'text-slate-500'}`}>Gallery Previews:</span>
-                    <div className="flex flex-wrap gap-2 mt-1">
+                  <div className="mt-1 pb-1">
+                    <span className={`text-[9px] font-bold uppercase tracking-wider font-mono ${isDarkMode ? 'text-slate-400 font-extrabold' : 'text-slate-500'}`}>
+                      Active Gallery Images ({additionalImages.trim().split('\n').filter(url => url.trim().length > 0).length}) Click Thumbnail to Delete:
+                    </span>
+                    
+                    <div className="flex flex-wrap gap-2.5 mt-1.5">
                       {additionalImages.split('\n').map((url, i) => {
                         const trimmed = url.trim();
                         if (!trimmed) return null;
                         return (
-                          <div key={i} className="relative w-12 h-12 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 flex shadow-inner">
+                          <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-250 dark:border-slate-800 bg-slate-100 dark:bg-slate-950 flex shadow-sm group">
                             <img
                               src={trimmed}
                               alt={`Preview ${i+1}`}
                               referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover transition-transform group-hover:scale-105"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Error';
+                                (e.target as HTMLImageElement).src = 'https://placehold.co/100x100?text=Broken+URL';
                               }}
                             />
-                            <span className="absolute bottom-0 right-0 bg-slate-900/80 text-white text-[8px] font-mono px-1 rounded-tl">#{i+1}</span>
+                            
+                            {/* Tiny Hover Indicator count */}
+                            <span className="absolute bottom-1 right-1 bg-slate-900/80 text-white text-[8px] font-mono font-bold px-1 py-0.2 rounded">
+                              #{i+1}
+                            </span>
+
+                            {/* Overlaid Trash button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const lines = additionalImages.split('\n');
+                                const filtered = lines.filter((_, idx) => idx !== i);
+                                setAdditionalImages(filtered.join('\n'));
+                              }}
+                              className="absolute inset-0 bg-rose-600/90 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-200"
+                              title="Delete this image"
+                            >
+                              <Trash2 size={16} />
+                            </button>
                           </div>
                         );
                       })}
@@ -1121,9 +1186,29 @@ export default function AdminPanel({
                   />
                   <div>
                     <p className={`text-xs font-bold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>Direct Redirection on Click</p>
-                    <p className="text-[10px] text-slate-400">Clicking anywhere on the product card or details button will directly open the affiliate link, bypassing the specifications modal.</p>
+                    <p className="text-[10px] text-slate-400">Clicking anywhere on the product card or details button will directly open the product redirect link, bypassing the specifications modal.</p>
                   </div>
                 </label>
+              </div>
+
+              {/* Secure Checkout Custom Details note */}
+              <div className="md:col-span-12 flex flex-col gap-1.5 mt-2">
+                <label className={`text-xs font-bold uppercase tracking-wide ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Custom Secure Checkout Details (Optional)
+                </label>
+                <textarea
+                  placeholder="Enter custom details about warranty, shipping, or merchant connection specifically for this product."
+                  value={secureCheckoutDetails}
+                  onChange={(e) => setSecureCheckoutDetails(e.target.value)}
+                  maxLength={1500}
+                  rows={2}
+                  className={`w-full px-3.5 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs ${
+                    isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-slate-50/20 border-slate-350 text-slate-900'
+                  }`}
+                />
+                <p className={`text-[10px] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                  This detail note will be displayed in the product modal right under the secure connection secure checkout pipeline text.
+                </p>
               </div>
 
             </div>
@@ -1511,7 +1596,7 @@ export default function AdminPanel({
                   className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
                     isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
                   }`}
-                  placeholder="e.g. Affiliate"
+                  placeholder="e.g. Curated"
                   required
                 />
               </div>
@@ -1763,7 +1848,7 @@ export default function AdminPanel({
                   className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
                     isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
                   }`}
-                  placeholder="e.g. © 2026 Affiliate Showcase. All Rights Reserved."
+                  placeholder="e.g. © 2026 Curated Showcase. All Rights Reserved."
                   required
                 />
               </div>
@@ -1871,7 +1956,7 @@ export default function AdminPanel({
                               value={bHeaderBannerLinkUrl}
                               onChange={(e) => setBHeaderBannerLinkUrl(e.target.value)}
                               className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'}`}
-                              placeholder="https://merchant-affiliate-link.com"
+                              placeholder="https://merchant-product-link.com"
                             />
                           </div>
                         </div>
@@ -1930,7 +2015,7 @@ export default function AdminPanel({
                               value={bFeedBannerLinkUrl}
                               onChange={(e) => setBFeedBannerLinkUrl(e.target.value)}
                               className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'}`}
-                              placeholder="https://merchant-affiliate-link.com"
+                              placeholder="https://merchant-product-link.com"
                             />
                           </div>
                         </div>
@@ -1989,7 +2074,7 @@ export default function AdminPanel({
                               value={bFooterBannerLinkUrl}
                               onChange={(e) => setBFooterBannerLinkUrl(e.target.value)}
                               className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'}`}
-                              placeholder="https://merchant-affiliate-link.com"
+                              placeholder="https://merchant-product-link.com"
                             />
                           </div>
                         </div>
@@ -2048,7 +2133,7 @@ export default function AdminPanel({
                               value={bLeftSkyscraperLinkUrl}
                               onChange={(e) => setBLeftSkyscraperLinkUrl(e.target.value)}
                               className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'}`}
-                              placeholder="https://merchant-affiliate-link.com"
+                              placeholder="https://merchant-product-link.com"
                             />
                           </div>
                         </div>
@@ -2106,8 +2191,8 @@ export default function AdminPanel({
                               type="text"
                               value={bRightSkyscraperLinkUrl}
                               onChange={(e) => setBRightSkyscraperLinkUrl(e.target.value)}
-                              className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'}`}
-                              placeholder="https://merchant-affiliate-link.com"
+                              className={`w-full px-3.5 py-1.5 border rounded-lg text-xs ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-105' : 'bg-white border-slate-300 text-slate-900'}`}
+                              placeholder="https://merchant-product-link.com"
                             />
                           </div>
                         </div>

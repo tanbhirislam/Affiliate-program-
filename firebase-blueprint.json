@@ -41,6 +41,10 @@
           "type": "array",
           "description": "A bounded array listing user benefit strings."
         },
+        "images": {
+          "type": "array",
+          "description": "An array of alternative product showcase image asset URLs."
+        },
         "rating": {
           "type": "number",
           "description": "Weighted satisfaction rating scale, from 1.0 to 5.0."
@@ -52,6 +56,10 @@
         "isTrending": {
           "type": "boolean",
           "description": "Indicates whether the product displays in the trending carousels."
+        },
+        "secureCheckoutDetails": {
+          "type": "string",
+          "description": "Customizable secure checkout pipeline detail text displayed in product modal."
         },
         "clickCount": {
           "type": "integer",

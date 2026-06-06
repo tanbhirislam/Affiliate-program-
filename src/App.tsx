@@ -59,13 +59,13 @@ export default function App() {
         if (parsed && typeof parsed === 'object') {
           return {
             id: 'branding',
-            siteName: parsed.siteName || 'Affiliate',
+            siteName: parsed.siteName || 'Curated',
             siteNameHighlighted: parsed.siteNameHighlighted || 'Showcase',
             slogan: parsed.slogan || 'CURATED STOREFRONT',
-            logoLetter: parsed.logoLetter || 'A',
+            logoLetter: parsed.logoLetter || 'C',
             heroHeadline: parsed.heroHeadline || 'Vetted Premium Tech Products & Curated Recommendations',
             heroSubheadline: parsed.heroSubheadline || 'Save hours of research. We audit specifications, check authentic reviews, and index live prices so you instantly secure the absolute best deals.',
-            footerText: parsed.footerText || '© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.',
+            footerText: parsed.footerText || '© 2026 Curated Product Showcase. All Rights Reserved.',
             footerDisclaimer: parsed.footerDisclaimer || 'We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.',
             accentColor: parsed.accentColor || 'blue',
             logoShape: parsed.logoShape || 'rounded',
@@ -109,13 +109,13 @@ export default function App() {
 
     return {
       id: 'branding',
-      siteName: 'Affiliate',
+      siteName: 'Curated',
       siteNameHighlighted: 'Showcase',
       slogan: 'CURATED STOREFRONT',
-      logoLetter: 'A',
+      logoLetter: 'C',
       heroHeadline: 'Vetted Premium Tech Products & Curated Recommendations',
       heroSubheadline: 'Save hours of research. We audit specifications, check authentic reviews, and index live prices so you instantly secure the absolute best deals.',
-      footerText: '© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.',
+      footerText: '© 2026 Curated Product Showcase. All Rights Reserved.',
       footerDisclaimer: 'We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.',
       accentColor: 'blue',
       logoShape: 'rounded',
@@ -154,7 +154,7 @@ export default function App() {
   });
 
   // Custom pages config states
-  const [aboutConfig, setAboutConfig] = useState({ content: 'Welcome to our premium affiliate catalog showroom. We audit, review, and list elite products across technology, software, and lifestyle gear.' });
+  const [aboutConfig, setAboutConfig] = useState({ content: 'Welcome to our premium curated catalog showroom. We audit, review, and list elite products across technology, software, and lifestyle gear.' });
   const [contactConfig, setContactConfig] = useState({ content: 'Have any inquiries? Fill out the contact form below or reach us directly using our official contact endpoints.', email: 'support@example.com', phone: '', address: '' });
   const [privacyConfig, setPrivacyConfig] = useState({ content: 'We strongly believe in transparency. This storefront logs basic conversion click counters to identify checkout performance but never archives PII parameters.' });
   const [activeFootnotePage, setActiveFootnotePage] = useState<'about' | 'contact' | 'privacy' | null>(null);
@@ -196,13 +196,13 @@ export default function App() {
         const data = snapshot.data();
         const updatedConfig = {
           id: 'branding',
-          siteName: data.siteName || 'Affiliate',
+          siteName: data.siteName || 'Curated',
           siteNameHighlighted: data.siteNameHighlighted || 'Showcase',
           slogan: data.slogan || 'CURATED STOREFRONT',
-          logoLetter: data.logoLetter || 'A',
+          logoLetter: data.logoLetter || 'C',
           heroHeadline: data.heroHeadline || 'Vetted Premium Tech Products & Curated Recommendations',
           heroSubheadline: data.heroSubheadline || 'Save hours of research. We audit specifications, check authentic reviews, and index live prices so you instantly secure the absolute best deals.',
-          footerText: data.footerText || '© 2026 Affiliate Marketing Product Showcase. All Rights Reserved.',
+          footerText: data.footerText || '© 2026 Curated Product Showcase. All Rights Reserved.',
           footerDisclaimer: data.footerDisclaimer || 'We operate as an independent curated showroom. Redirection checkouts are verified and authorized directly on the manufacturer merchants website. Standard click telemetry trackers remain active to record traffic conversions safely.',
           accentColor: data.accentColor || 'blue',
           logoShape: data.logoShape || 'rounded',
@@ -275,7 +275,7 @@ export default function App() {
     if (themeConfig.faviconName && themeConfig.faviconName.trim() !== '') {
       document.title = themeConfig.faviconName;
     } else {
-      const defaultTitle = `${themeConfig.siteName || 'Affiliate'} ${themeConfig.siteNameHighlighted || 'Showcase'} - ${themeConfig.slogan || 'Curated Storefront'}`;
+      const defaultTitle = `${themeConfig.siteName || 'Curated'} ${themeConfig.siteNameHighlighted || 'Showcase'} - ${themeConfig.slogan || 'Curated Storefront'}`;
       document.title = defaultTitle;
     }
   }, [themeConfig.faviconName, themeConfig.siteName, themeConfig.siteNameHighlighted, themeConfig.slogan]);
@@ -398,6 +398,7 @@ export default function App() {
           isFeatured: data.isFeatured,
           isTrending: data.isTrending,
           benefits: data.benefits || [],
+          images: data.images || [],
           clickCount: data.clickCount || 0,
           hideBuyNow: data.hideBuyNow || false,
           directRedirect: data.directRedirect || false,
@@ -843,7 +844,7 @@ export default function App() {
                           Curator Verified
                         </p>
                         <p className={`text-[9.5px] leading-normal ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                          All products under our affiliate list are subjected to stringent performance auditing and verification tests.
+                          All products under our curated list are subjected to stringent performance auditing and verification tests.
                         </p>
                       </div>
                     </div>
@@ -1014,7 +1015,7 @@ export default function App() {
       <AnimatePresence>
         {selectedProduct && (
           <ProductDetailModal
-            product={selectedProduct}
+            product={products.find(p => p.id === selectedProduct.id) || selectedProduct}
             onClose={() => setSelectedProduct(null)}
             onRedirectClick={handleRedirectClick}
             activeTheme={activeTheme}
