@@ -99,7 +99,13 @@ export default function App() {
             footerBannerType: parsed.footerBannerType || 'hidden',
             footerBannerCode: parsed.footerBannerCode || '',
             footerBannerImageUrl: parsed.footerBannerImageUrl || '',
-            footerBannerLinkUrl: parsed.footerBannerLinkUrl || ''
+            footerBannerLinkUrl: parsed.footerBannerLinkUrl || '',
+            trustTitle: parsed.trustTitle || 'Product Specifications & Highlights',
+            trustDesc: parsed.trustDesc || 'Review custom feature configurations and layout specifications optimized for this exclusive model.',
+            trustBullet1: parsed.trustBullet1 || '',
+            trustBullet2: parsed.trustBullet2 || '',
+            trustBullet3: parsed.trustBullet3 || '',
+            trustBullet4: parsed.trustBullet4 || ''
           };
         }
       }
@@ -149,7 +155,13 @@ export default function App() {
       footerBannerType: 'hidden',
       footerBannerCode: '',
       footerBannerImageUrl: '',
-      footerBannerLinkUrl: ''
+      footerBannerLinkUrl: '',
+      trustTitle: 'Product Specifications & Highlights',
+      trustDesc: 'Review custom feature configurations and layout specifications optimized for this exclusive model.',
+      trustBullet1: '',
+      trustBullet2: '',
+      trustBullet3: '',
+      trustBullet4: ''
     };
   });
 
@@ -236,7 +248,13 @@ export default function App() {
           footerBannerType: data.footerBannerType || 'hidden',
           footerBannerCode: data.footerBannerCode || '',
           footerBannerImageUrl: data.footerBannerImageUrl || '',
-          footerBannerLinkUrl: data.footerBannerLinkUrl || ''
+          footerBannerLinkUrl: data.footerBannerLinkUrl || '',
+          trustTitle: data.trustTitle || 'Product Specifications & Highlights',
+          trustDesc: data.trustDesc || 'Review custom feature configurations and layout specifications optimized for this exclusive model.',
+          trustBullet1: data.trustBullet1 || '',
+          trustBullet2: data.trustBullet2 || '',
+          trustBullet3: data.trustBullet3 || '',
+          trustBullet4: data.trustBullet4 || ''
         };
         setThemeConfig(updatedConfig);
         try {
@@ -402,6 +420,13 @@ export default function App() {
           clickCount: data.clickCount || 0,
           hideBuyNow: data.hideBuyNow || false,
           directRedirect: data.directRedirect || false,
+          secureCheckoutDetails: data.secureCheckoutDetails || '',
+          trustTitle: data.trustTitle || '',
+          trustDesc: data.trustDesc || '',
+          trustBullet1: data.trustBullet1 || '',
+          trustBullet2: data.trustBullet2 || '',
+          trustBullet3: data.trustBullet3 || '',
+          trustBullet4: data.trustBullet4 || '',
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         });
@@ -1020,6 +1045,7 @@ export default function App() {
             onRedirectClick={handleRedirectClick}
             activeTheme={activeTheme}
             isDarkMode={isDarkMode}
+            themeConfig={themeConfig}
           />
         )}
       </AnimatePresence>

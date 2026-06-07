@@ -55,6 +55,12 @@ service cloud.firestore {
         && (!('hideBuyNow' in p) || p.hideBuyNow is bool)
         && (!('directRedirect' in p) || p.directRedirect is bool)
         && (!('secureCheckoutDetails' in p) || (p.secureCheckoutDetails is string && p.secureCheckoutDetails.size() <= 1500))
+        && (!('trustTitle' in p) || (p.trustTitle is string && p.trustTitle.size() <= 300))
+        && (!('trustDesc' in p) || (p.trustDesc is string && p.trustDesc.size() <= 1000))
+        && (!('trustBullet1' in p) || (p.trustBullet1 is string && p.trustBullet1.size() <= 300))
+        && (!('trustBullet2' in p) || (p.trustBullet2 is string && p.trustBullet2.size() <= 300))
+        && (!('trustBullet3' in p) || (p.trustBullet3 is string && p.trustBullet3.size() <= 300))
+        && (!('trustBullet4' in p) || (p.trustBullet4 is string && p.trustBullet4.size() <= 300))
         && (!('clickCount' in p) || p.clickCount is int)
         && (!('createdAt' in p) || p.createdAt is timestamp)
         && (!('updatedAt' in p) || p.updatedAt is timestamp);

@@ -18,6 +18,7 @@ interface ProductDetailModalProps {
   onRedirectClick: (p: Product, buttonType: 'buy_now' | 'view_deal') => void;
   activeTheme?: any;
   isDarkMode?: boolean;
+  themeConfig?: any;
 }
 
 export default function ProductDetailModal({ 
@@ -25,7 +26,8 @@ export default function ProductDetailModal({
   onClose, 
   onRedirectClick, 
   activeTheme, 
-  isDarkMode = false 
+  isDarkMode = false,
+  themeConfig
 }: ProductDetailModalProps) {
   if (!product) return null;
 
@@ -125,7 +127,7 @@ export default function ProductDetailModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.97, y: 15 }}
         transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-        className={`rounded-2xl max-w-6xl w-full max-h-[94vh] overflow-y-auto shadow-2xl relative border transition-all duration-300 ${
+        className={`rounded-2xl max-w-4xl w-full max-h-[94vh] overflow-y-auto shadow-2xl relative border transition-all duration-300 ${
           isDarkMode 
             ? 'bg-slate-900 border-slate-800 text-slate-100 shadow-slate-950/90' 
             : 'bg-white border-slate-200 text-slate-900 shadow-slate-350/50'
@@ -361,52 +363,78 @@ export default function ProductDetailModal({
                   )}
                 </div>
 
-                {/* Simplified Safe Connection Badging */}
+                {/* Custom Product Details & Specifications */}
                 <div className={`rounded-xl p-3 border flex flex-col gap-2.5 ${
                   isDarkMode ? 'bg-slate-950/30 border-slate-800/60' : 'bg-slate-50/30 border-slate-200/60'
                 }`}>
                   <div className="flex items-start gap-2.5">
-                    <ShieldCheck className="text-emerald-500 flex-shrink-0 mt-0.5" size={14} />
+                    <Sparkles className="text-amber-500 flex-shrink-0 mt-0.5" size={14} />
                     <div className="flex flex-col gap-0.5">
                       <p className={`text-[11.5px] font-bold ${isDarkMode ? 'text-slate-250' : 'text-slate-850'}`}>
-                        Secure & Direct Retailer Checkout Pipeline
+                        {product.trustTitle || themeConfig?.trustTitle || 'Product Specifications & Highlights'}
                       </p>
-                      <p className={`text-[10.5px] leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                        Secure and direct retailer checkout pipeline. External scripts, trackers, or copy cookies are strictly locked out.
-                      </p>
+                      {product.trustDesc ? (
+                        <p className={`text-[10.5px] leading-relaxed whitespace-pre-line ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                          {product.trustDesc}
+                        </p>
+                      ) : (
+                        <p className={`text-[10.5px] leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                          {themeConfig?.trustDesc || 'Review custom feature configurations and layout specifications optimized for this exclusive model.'}
+                        </p>
+                      )}
                       {product.secureCheckoutDetails && (
                         <div className={`mt-2 p-2.5 rounded-lg text-[10px] border leading-relaxed ${
                           isDarkMode 
                             ? 'bg-slate-900/50 border-slate-800/80 text-slate-300' 
                             : 'bg-white border-slate-200 text-slate-600'
                         }`}>
-                          <p className="font-bold text-emerald-500 mb-0.5 uppercase tracking-wider text-[9px]">Additional Checkout Notes:</p>
+                          <p className="font-bold text-amber-505 mb-0.5 uppercase tracking-wider text-[9px]">Additional Details:</p>
                           <p className="whitespace-pre-line">{product.secureCheckoutDetails}</p>
                         </div>
                       )}
                     </div>
                   </div>
                   
-                  <div className="border-t border-slate-200/10 dark:border-slate-800/60 my-0.5"></div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] pl-1.5 list-none">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
-                      <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Direct Official Store Checkout</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
-                      <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>No Middleman Fees or Markup Prices</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
-                      <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Real-time Merchant Price Sync</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
-                      <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Manufacturer Warranty Fully Protected</span>
-                    </div>
-                  </div>
+                  {(product.trustBullet1 || product.trustBullet2 || product.trustBullet3 || product.trustBullet4) && (
+                    <>
+                      <div className="border-t border-slate-200/10 dark:border-slate-800/60 my-0.5"></div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px] pl-1.5 list-none">
+                        {product.trustBullet1 && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                            <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
+                              {product.trustBullet1}
+                            </span>
+                          </div>
+                        )}
+                        {product.trustBullet2 && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                            <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
+                              {product.trustBullet2}
+                            </span>
+                          </div>
+                        )}
+                        {product.trustBullet3 && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                            <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
+                              {product.trustBullet3}
+                            </span>
+                          </div>
+                        )}
+                        {product.trustBullet4 && (
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                            <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
+                              {product.trustBullet4}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
 
               </div>

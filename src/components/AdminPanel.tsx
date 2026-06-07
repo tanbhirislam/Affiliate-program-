@@ -77,6 +77,8 @@ export default function AdminPanel({
   const [bYoutubeUrl, setBYoutubeUrl] = useState('');
   const [bTelegramUrl, setBTelegramUrl] = useState('');
   const [bTiktokUrl, setBTiktokUrl] = useState('');
+  const [bTrustTitle, setBTrustTitle] = useState('Product Specifications & Highlights');
+  const [bTrustDesc, setBTrustDesc] = useState('Review custom feature configurations and layout specifications optimized for this exclusive model.');
   const [savingBranding, setSavingBranding] = useState(false);
 
   // Advertisement module configuration hook states
@@ -156,6 +158,8 @@ export default function AdminPanel({
       setBFooterBannerCode(themeConfig.footerBannerCode || '');
       setBFooterBannerImageUrl(themeConfig.footerBannerImageUrl || '');
       setBFooterBannerLinkUrl(themeConfig.footerBannerLinkUrl || '');
+      setBTrustTitle(themeConfig.trustTitle || 'Product Specifications & Highlights');
+      setBTrustDesc(themeConfig.trustDesc || 'Review custom feature configurations and layout specifications optimized for this exclusive model.');
     }
   }, [themeConfig]);
 
@@ -235,6 +239,8 @@ export default function AdminPanel({
         footerBannerCode: bFooterBannerCode,
         footerBannerImageUrl: bFooterBannerImageUrl,
         footerBannerLinkUrl: bFooterBannerLinkUrl,
+        trustTitle: bTrustTitle.trim(),
+        trustDesc: bTrustDesc.trim(),
         updatedAt: new Date()
       }, { merge: true });
 
@@ -310,6 +316,12 @@ export default function AdminPanel({
   const [hideBuyNow, setHideBuyNow] = useState(false);
   const [directRedirect, setDirectRedirect] = useState(false);
   const [secureCheckoutDetails, setSecureCheckoutDetails] = useState('');
+  const [trustTitle, setTrustTitle] = useState('');
+  const [trustDesc, setTrustDesc] = useState('');
+  const [trustBullet1, setTrustBullet1] = useState('');
+  const [trustBullet2, setTrustBullet2] = useState('');
+  const [trustBullet3, setTrustBullet3] = useState('');
+  const [trustBullet4, setTrustBullet4] = useState('');
 
   // Auto-clear notifications helper
   useEffect(() => {
@@ -451,6 +463,12 @@ export default function AdminPanel({
     setHideBuyNow(prod.hideBuyNow || false);
     setDirectRedirect(prod.directRedirect || false);
     setSecureCheckoutDetails(prod.secureCheckoutDetails || '');
+    setTrustTitle(prod.trustTitle || '');
+    setTrustDesc(prod.trustDesc || '');
+    setTrustBullet1(prod.trustBullet1 || '');
+    setTrustBullet2(prod.trustBullet2 || '');
+    setTrustBullet3(prod.trustBullet3 || '');
+    setTrustBullet4(prod.trustBullet4 || '');
     setActiveTab('create');
   };
 
@@ -473,6 +491,12 @@ export default function AdminPanel({
     setHideBuyNow(false);
     setDirectRedirect(false);
     setSecureCheckoutDetails('');
+    setTrustTitle('');
+    setTrustDesc('');
+    setTrustBullet1('');
+    setTrustBullet2('');
+    setTrustBullet3('');
+    setTrustBullet4('');
   };
 
   // Create / Update product handler
@@ -531,6 +555,12 @@ export default function AdminPanel({
         hideBuyNow,
         directRedirect,
         secureCheckoutDetails: secureCheckoutDetails.trim(),
+        trustTitle: trustTitle.trim(),
+        trustDesc: trustDesc.trim(),
+        trustBullet1: trustBullet1.trim(),
+        trustBullet2: trustBullet2.trim(),
+        trustBullet3: trustBullet3.trim(),
+        trustBullet4: trustBullet4.trim(),
         updatedAt: serverTimestamp(),
       };
 
@@ -1211,6 +1241,110 @@ export default function AdminPanel({
                 </p>
               </div>
 
+              {/* Custom Product Details Customization Module */}
+              <div className="md:col-span-12 border-t pt-4 mt-2 space-y-4">
+                <div>
+                  <h4 className={`text-xs font-bold uppercase font-mono tracking-wider ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
+                    Custom Product Details / Highlights (Optional)
+                  </h4>
+                  <p className="text-[10px] text-slate-400">
+                    Customize the specific section header, details description, and custom specification list items displayed in this product's detailed specifications box.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5 font-medium md:col-span-2">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Product Details Title Header
+                    </label>
+                    <input
+                      type="text"
+                      value={trustTitle}
+                      onChange={(e) => setTrustTitle(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="Default: Product Specifications & Highlights"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 font-medium md:col-span-2">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Product Details Summary/Description
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={trustDesc}
+                      onChange={(e) => setTrustDesc(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="Default: Review custom feature configurations and layout specifications optimized for this exclusive model."
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 font-medium">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Custom Specification Bullet 1
+                    </label>
+                    <input
+                      type="text"
+                      value={trustBullet1}
+                      onChange={(e) => setTrustBullet1(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="e.g. Up to 18 hours of extreme battery life"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 font-medium">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Custom Specification Bullet 2
+                    </label>
+                    <input
+                      type="text"
+                      value={trustBullet2}
+                      onChange={(e) => setTrustBullet2(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="e.g. Stunning Liquid Retina display with True Tone"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 font-medium">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Custom Specification Bullet 3
+                    </label>
+                    <input
+                      type="text"
+                      value={trustBullet3}
+                      onChange={(e) => setTrustBullet3(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="e.g. Next-generation High-speed Processor"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 font-medium">
+                    <label className={`text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      Custom Specification Bullet 4
+                    </label>
+                    <input
+                      type="text"
+                      value={trustBullet4}
+                      onChange={(e) => setTrustBullet4(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-350 text-slate-900'
+                      }`}
+                      placeholder="e.g. Premium aluminum lightweight unibody"
+                    />
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <div className={`border-t pt-5 flex items-center justify-end gap-3 ${isDarkMode ? 'border-slate-800' : 'border-slate-100'}`}>
@@ -1864,6 +1998,46 @@ export default function AdminPanel({
                   }`}
                   placeholder="Enter legal specifications disclaimer statement"
                 />
+              </div>
+
+              {/* Global Default Product Specifications */}
+              <div className={`md:col-span-2 border-t pt-5 mt-3 space-y-4 ${isDarkMode ? 'border-slate-800' : 'border-slate-100'}`}>
+                <div>
+                  <h4 className="text-xs font-bold uppercase font-mono tracking-wider text-amber-500">
+                    Global Default Product Specifications/Highlights Fallbacks
+                  </h4>
+                  <p className={`text-[11px] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    These default values are shown on any product's details modal when custom specifications/highlights are left blank for that specific product.
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5 font-medium md:col-span-2">
+                    <label className={`block text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Default Specifications Box Title</label>
+                    <input
+                      type="text"
+                      value={bTrustTitle}
+                      onChange={(e) => setBTrustTitle(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                      placeholder="e.g. Product Specifications & Highlights"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5 font-medium md:col-span-2">
+                    <label className={`block text-[10px] font-bold uppercase font-mono ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Default Specifications Description Summary</label>
+                    <textarea
+                      rows={2}
+                      value={bTrustDesc}
+                      onChange={(e) => setBTrustDesc(e.target.value)}
+                      className={`w-full px-3.5 py-2 border rounded-lg text-xs font-medium focus:ring-1 focus:ring-blue-500 focus:outline-none ${
+                        isDarkMode ? 'bg-slate-950 border-slate-800 text-slate-100' : 'bg-white border-slate-300 text-slate-900'
+                      }`}
+                      placeholder="e.g. Review custom feature configurations and layout specifications optimized for this exclusive model."
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* SECTION: Monetization & Adspaces Control */}

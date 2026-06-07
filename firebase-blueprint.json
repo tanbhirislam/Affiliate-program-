@@ -61,6 +61,30 @@
           "type": "string",
           "description": "Customizable secure checkout pipeline detail text displayed in product modal."
         },
+        "trustTitle": {
+          "type": "string",
+          "description": "Customizable title for the checkout trust badges panel."
+        },
+        "trustDesc": {
+          "type": "string",
+          "description": "Customizable description for the checkout trust badges panel."
+        },
+        "trustBullet1": {
+          "type": "string",
+          "description": "Trust bullet item 1."
+        },
+        "trustBullet2": {
+          "type": "string",
+          "description": "Trust bullet item 2."
+        },
+        "trustBullet3": {
+          "type": "string",
+          "description": "Trust bullet item 3."
+        },
+        "trustBullet4": {
+          "type": "string",
+          "description": "Trust bullet item 4."
+        },
         "clickCount": {
           "type": "integer",
           "description": "Statistical summary count tracking redirected checkouts."

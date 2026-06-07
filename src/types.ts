@@ -24,6 +24,12 @@ export interface Product {
   hideBuyNow?: boolean;
   directRedirect?: boolean;
   secureCheckoutDetails?: string;
+  trustTitle?: string;
+  trustDesc?: string;
+  trustBullet1?: string;
+  trustBullet2?: string;
+  trustBullet3?: string;
+  trustBullet4?: string;
 }
 
 export interface ClickEvent {
